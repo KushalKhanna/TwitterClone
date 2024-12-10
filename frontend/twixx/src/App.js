@@ -1,9 +1,10 @@
 import './App.css';
+import Navigation from './navigation/navigation';
 
 function App() {
   return (
     <div className="App">
-      <div className='text-6xl'>TWIXX</div>
+      <Navigation />
     </div>
   );
 }
