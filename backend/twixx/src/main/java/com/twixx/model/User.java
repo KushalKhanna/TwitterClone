@@ -1,4 +1,4 @@
-package com.twixx;
+package com.twixx.model;
 
 public class User {
     private static User _instance;
