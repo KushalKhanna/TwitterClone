@@ -1,7 +1,14 @@
 import React from 'react'
 import Navbar from '../navbar/navbar';
 
+import { useLocation } from 'react-router-dom';
+
+
 const Homepage = () => {
+    const location = useLocation();
+    const queryParams = new URLSearchParams(location.search);
+    const username = queryParams.get('username');
+    console.log("user:", username)
     return (
         <div>
             <Navbar />
