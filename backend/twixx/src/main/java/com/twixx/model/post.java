@@ -1,7 +1,5 @@
 
-package com.twixx.entity;
-
-
+package com.twixx.model;
 import jakarta.persistence.*;
 
 @Entity
