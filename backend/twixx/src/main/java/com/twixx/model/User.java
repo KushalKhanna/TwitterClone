@@ -1,66 +1,42 @@
 package com.twixx.model;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Entity
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Table(name = "users")
 public class User {
     private static User _instance;
-    private int user_id;
-    private String username;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @Column(name="user_id")
+    private Integer userId;
+
+    @Column(name="user_name")
+    private String userName;
+
+    @Column(name="first_name")
     private String firstName;
-    private String surName;
+
+    @Column(name="last_name")
+    private String lastName;
+
+    @Column(name="password")
     private String password;
 
-    //Singleton pattern constructor. I want to incorporate the user_id with this    
-    private User()
-    {
-    }
-    public static User getGenerator()
-    {
-        if(_instance == null)
-        {
-            _instance = new User();
-        }
-        return _instance;
-    }
-
-    //Block of Getters and Setters for potential future use
-    public int getID()
-    {
-        return this.user_id;
-    }
-    public void setID(int id)
-    {
-        this.user_id = id;
-    }
-    public String getUsername()
-    {
-        return this.username;
-    }
-    public void setUsername(String username)
-    {
-        this.username = username;
-    }
-    public String getFirstName()
-    {
-        return this.firstName;
-    }
-    public void setFirstName(String firstName)
-    {
-        this.firstName = firstName;
-    }
-    public String getSurName()
-    {
-        return this.surName;
-    }
-    public void setSurName(String surName)
-    {
-        this.surName = surName;
-    }
-    public String getPassword()
-    {
-        return this.password;
-    }
-    public void setPassword(String password)
-    {
-        this.password = password;
-    }
-
+    @Column(name="friends")
+    private String friendList;
 }
