@@ -6,7 +6,7 @@ const Signup = () => {
     const [form, setForm] = useState({
         firstName: '',
         lastName: '',
-        username: '',
+        userName: '',
         password: '',
     });
 
@@ -24,7 +24,7 @@ const Signup = () => {
         setSuccess('');
 
         try {
-            const response = await fetch('https://127.0.0.1/signup', {
+            const response = await fetch('http://localhost:3001/signup', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

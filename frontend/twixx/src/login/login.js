@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 
 const Login = () => {
     const navigate = useNavigate();
-    const [form, setForm] = useState({ username: '', password: '' });
+    const [form, setForm] = useState({ userName: '', passWord: '' });
     const [error, setError] = useState('');
 
     const handleChange = (e) => {
@@ -16,7 +16,7 @@ const Login = () => {
         setError('');
 
         try {
-            const response = await fetch('https://your-api-endpoint.com/login', {
+            const response = await fetch('http://localhost:3001/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -32,7 +32,7 @@ const Login = () => {
             const data = await response.json();
             console.log('Login successful:', data);
 
-            navigate('/home');
+            navigate(`/home?username=${form.username}`);
         } catch (err) {
             console.error('Login error:', err.message);
             setError(err.message);
