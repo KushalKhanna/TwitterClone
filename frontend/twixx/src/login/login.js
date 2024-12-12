@@ -2,21 +2,41 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 const Login = () => {
-
     const navigate = useNavigate();
-
-    const [form, setForm] = useState({ email: '', password: '' });
+    const [form, setForm] = useState({ username: '', password: '' });
+    const [error, setError] = useState('');
 
     const handleChange = (e) => {
         const { name, value } = e.target;
         setForm((prevForm) => ({ ...prevForm, [name]: value }));
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log('Login data:', form);
-        navigate('/home');
-        // Add login logic here
+        setError('');
+
+        try {
+            const response = await fetch('https://your-api-endpoint.com/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(form),
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || 'Login failed');
+            }
+
+            const data = await response.json();
+            console.log('Login successful:', data);
+
+            navigate('/home');
+        } catch (err) {
+            console.error('Login error:', err.message);
+            setError(err.message);
+        }
     };
 
     return (
@@ -27,18 +47,22 @@ const Login = () => {
                     className="bg-white p-8 rounded-lg shadow-md w-96"
                 >
                     <h2 className="text-2xl font-bold mb-6 text-gray-800">Login</h2>
+
+                    {/* if error */}
+                    {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
+
                     <div className="mb-4">
                         <label
-                            htmlFor="email"
+                            htmlFor="username"
                             className="block text-gray-600 font-medium mb-2"
                         >
-                            Email
+                            User Name
                         </label>
                         <input
-                            type="email"
-                            id="email"
-                            name="email"
-                            value={form.email}
+                            type="text"
+                            id="username"
+                            name="username"
+                            value={form.username}
                             onChange={handleChange}
                             className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                             required
@@ -77,6 +101,6 @@ const Login = () => {
             </div>
         </div>
     );
-}
+};
 
-export default Login
+export default Login;

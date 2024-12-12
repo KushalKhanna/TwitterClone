@@ -1,23 +1,52 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Signup = () => {
+    const navigate = useNavigate(); 
     const [form, setForm] = useState({
         firstName: '',
         lastName: '',
-        email: '',
+        username: '',
         password: '',
     });
+
+    const [error, setError] = useState('');
+    const [success, setSuccess] = useState('');
 
     const handleChange = (e) => {
         const { name, value } = e.target;
         setForm((prevForm) => ({ ...prevForm, [name]: value }));
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log('Signup data:', form);
-        // Add signup logic here
+        setError('');
+        setSuccess('');
+
+        try {
+            const response = await fetch('https://127.0.0.1/signup', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(form),
+            });
+
+            if (!response.ok) {
+                // throw error if response code is not 200
+                const errorData = await response.json();
+                throw new Error(errorData.message || 'Something went wrong');
+            }
+
+            const data = await response.json();
+            setSuccess('Registration successful!');
+            console.log('Signup successful:', data);
+            navigate('/login');
+
+        } catch (err) {
+            console.error('Signup error:', err.message);
+            setError(err.message);
+        }
     };
 
     return (
@@ -27,6 +56,11 @@ const Signup = () => {
                 className="bg-white p-8 rounded-lg shadow-md w-96"
             >
                 <h2 className="text-2xl font-bold mb-6 text-gray-800">Sign Up</h2>
+
+                {/* show error msg or success msg*/}
+                {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
+                {success && <p className="text-green-500 text-sm mb-4">{success}</p>}
+
                 <div className="mb-4">
                     <label
                         htmlFor="firstName"
@@ -63,16 +97,16 @@ const Signup = () => {
                 </div>
                 <div className="mb-4">
                     <label
-                        htmlFor="email"
+                        htmlFor="username"
                         className="block text-gray-600 font-medium mb-2"
                     >
-                        Email
+                        User Name
                     </label>
                     <input
-                        type="email"
-                        id="email"
-                        name="email"
-                        value={form.email}
+                        type="text"
+                        id="username"
+                        name="username"
+                        value={form.username}
                         onChange={handleChange}
                         className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                         required
