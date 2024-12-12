@@ -8,6 +8,10 @@ const Navbar = () => {
 
     const [isModalOpen, setIsModalOpen] = useState(false);
 
+    const handleConnectionClick = () => {
+        navigate('/connections')
+    }
+
     const handleLogoutClick = () => {
         setIsModalOpen(true);
     };
@@ -46,8 +50,11 @@ const Navbar = () => {
                 </div>
 
                 <div className="flex space-x-4">
-                    <button className="text-white bg-blue-500 p-2 rounded-full hover:bg-blue-700">
+                    <button className="text-white bg-blue-500 p-2 rounded-full hover:bg-blue-700"
+                        onClick={handleConnectionClick}
+                    >
                         <i className="fas fa-user-friends"></i>
+                        {/* <FontAwesomeIcon icon="fa-solid fa-user-group" /> */}
                     </button>
                     <button className="text-white bg-blue-500 p-2 rounded-full hover:bg-blue-700">
                         <i className="fas fa-user-circle"></i>
