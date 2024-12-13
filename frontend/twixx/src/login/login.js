@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 
 const Login = () => {
     const navigate = useNavigate();
-    const [form, setForm] = useState({ userName: '', passWord: '' });
+    const [form, setForm] = useState({ userName: '', password: '' });
     const [error, setError] = useState('');
 
     const handleChange = (e) => {
@@ -16,7 +16,7 @@ const Login = () => {
         setError('');
 
         try {
-            const response = await fetch('http://localhost:3001/login', {
+            const response = await fetch('http://localhost:9090/user/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -32,7 +32,7 @@ const Login = () => {
             const data = await response.json();
             console.log('Login successful:', data);
 
-            navigate(`/home?username=${form.username}`);
+            navigate(`/home?userName=${form.userName}`);
         } catch (err) {
             console.error('Login error:', err.message);
             setError(err.message);
@@ -53,16 +53,16 @@ const Login = () => {
 
                     <div className="mb-4">
                         <label
-                            htmlFor="username"
+                            htmlFor="userName"
                             className="block text-gray-600 font-medium mb-2"
                         >
                             User Name
                         </label>
                         <input
                             type="text"
-                            id="username"
-                            name="username"
-                            value={form.username}
+                            id="userName"
+                            name="userName"
+                            value={form.userName}
                             onChange={handleChange}
                             className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                             required

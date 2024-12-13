@@ -25,13 +25,13 @@ public class User {
     @Column(name="user_id")
     private Integer userId;
 
-    @Column(name="user_name")
+    @Column(name="username")
     private String userName;
 
     @Column(name="first_name")
     private String firstName;
 
-    @Column(name="last_name")
+    @Column(name="sur_name")
     private String lastName;
 
     @Column(name="password")

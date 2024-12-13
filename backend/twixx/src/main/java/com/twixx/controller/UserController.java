@@ -1,13 +1,14 @@
 package com.twixx.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.twixx.model.User;
@@ -31,8 +32,9 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public boolean login(@RequestParam(value = "userName") final String userName,
-                         @RequestParam(value = "password") final String password) {
+    public boolean login(@RequestBody Map<String, String> payload) {
+        String userName = payload.get("userName");
+        String password = payload.get("password");
         return userService.login(userName, password);
     }
 }
