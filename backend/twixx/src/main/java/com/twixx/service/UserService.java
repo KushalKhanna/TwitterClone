@@ -31,7 +31,7 @@ public class UserService {
 
             if(password.equals(userClass.getPassword()))
             {
-                System.out.println("Login in Succesful");
+                System.out.println("Login Succesful");
                 return true;
             }
             else
