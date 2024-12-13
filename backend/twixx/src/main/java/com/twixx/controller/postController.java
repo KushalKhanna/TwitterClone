@@ -13,6 +13,7 @@ import com.example.twixx.repository.postRepo;
 
 
 @RestController
+@RequestMapping("/user")
 public class postController {
 
     @Autowired
