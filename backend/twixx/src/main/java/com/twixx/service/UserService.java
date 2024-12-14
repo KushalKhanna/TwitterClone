@@ -1,12 +1,13 @@
 package com.twixx.service;
 
-import com.twixx.model.User;
-import com.twixx.repository.UserRepository;
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import com.twixx.model.User;
+import com.twixx.repository.UserRepository;
 
 @Service
 public class UserService {
@@ -26,7 +27,18 @@ public class UserService {
                 return false;
             }
             // Add sign-in logic
-            return true;
+            User userClass = user.get();
+
+            if(password.equals(userClass.getPassword()))
+            {
+                System.out.println("Login Succesful");
+                return true;
+            }
+            else
+            {
+                System.out.println("Invalid Password");
+                return false;
+            }
         } catch (Exception e) {
             e.printStackTrace();
             return false;
