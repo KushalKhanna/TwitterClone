@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.twixx.model.SignUpRequest;
 import com.twixx.model.User;
 import com.twixx.repository.UserRepository;
 
@@ -43,5 +44,25 @@ public class UserService {
             e.printStackTrace();
             return false;
         }
+    }
+    public String signUpUser(SignUpRequest signUpRequest) {
+        // Check if user already exists using Optional
+        Optional<User> existingUser = userRepository.findByUserName(signUpRequest.getUserName());
+        
+        if (existingUser.isPresent()) {
+            return "Username already exists!";
+        }
+
+        // Create a new User entity
+        User newUser = new User();
+        newUser.setFirstName(signUpRequest.getFirstName());
+        newUser.setLastName(signUpRequest.getLastName());
+        newUser.setUserName(signUpRequest.getUserName());
+        newUser.setPassword(signUpRequest.getPassword());
+
+        // Save the new user to the database
+        userRepository.save(newUser);
+
+        return "User registered successfully!";
     }
 }
