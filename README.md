@@ -2,7 +2,7 @@
 A Twitter Clone Application
 
 ## Project Details
-The program has three parts a Frontend, Backend and Database. We used React as our language for the Frontend. Java for the backend and Postgresql for the Database. The project also uses Spring as part of the API. In Backend, we used Singleton and Observer Pattern as part of our code for this project. This project was made by Allen Vattakkattu Tom,Corey Gendron, Kushal Khanna, Nithish Dhananjay Yadav Mummidi, Vanam Sanjay Shanker, Xuyang Wu. 
+The program has three parts a Frontend, Backend and Database. We used React as our language for the Frontend. Java for the backend and Postgresql for the Database. The project also uses Spring as part of the API. In Backend, we used Singleton and Observer Pattern as part of our code for this project. This project was made by Allen Vattakkattu Tom, Corey Gendron, Kushal Khanna, Nithish Dhananjay Yadav Mummidi, Vanam Sanjay Shanker, Xuyang Wu. 
 
 
 ## How to run each end
