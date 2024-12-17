@@ -1,17 +1,19 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
+
+import apiUrls from '../constants/constants';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Signup = () => {
-    const navigate = useNavigate(); 
+    const navigate = useNavigate();
     const [form, setForm] = useState({
         firstName: '',
         lastName: '',
         userName: '',
         password: '',
     });
-
-    const [error, setError] = useState('');
-    const [success, setSuccess] = useState('');
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -20,32 +22,60 @@ const Signup = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setError('');
-        setSuccess('');
 
         try {
-            const response = await fetch('http://localhost:3001/signup', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(form),
-            });
+            const response = await axios.post(`${apiUrls.userBaseUrl}/signup`, null,
+                {
+                    params: {
+                        firstName: form.firstName,
+                        lastName: form.lastName,
+                        userName: form.userName,
+                        password: form.password,
+                    },
+                }
+            );
 
-            if (!response.ok) {
-                // throw error if response code is not 200
-                const errorData = await response.json();
-                throw new Error(errorData.message || 'Something went wrong');
+            if (response.status !== 200) {
+                toast.error("Error in registering the user'", {
+                    position: "top-right",
+                    autoClose: 1500,
+                    hideProgressBar: true,
+                    closeOnClick: true,
+                    pauseOnHover: false,
+                });
             }
 
-            const data = await response.json();
-            setSuccess('Registration successful!');
-            console.log('Signup successful:', data);
-            navigate('/login');
+            if (response.data) {
+                toast.success('User registered successfully!', {
+                    position: "top-right",
+                    autoClose: 1500,
+                    hideProgressBar: true,
+                    closeOnClick: true,
+                    pauseOnHover: false,
+                    onClose: () => {
+
+                        navigate('/login');
+                    }
+                });
+            } else {
+                toast.error('Something went wrong!', {
+                    position: "top-right",
+                    autoClose: 1500,
+                    hideProgressBar: true,
+                    closeOnClick: true,
+                    pauseOnHover: false,
+                });
+            }
 
         } catch (err) {
-            console.error('Signup error:', err.message);
-            setError(err.message);
+            toast.error(err, {
+                position: "top-right",
+                autoClose: 1500,
+                hideProgressBar: true,
+                closeOnClick: true,
+                pauseOnHover: false,
+            });
+
         }
     };
 
@@ -56,10 +86,6 @@ const Signup = () => {
                 className="bg-white p-8 rounded-lg shadow-md w-96"
             >
                 <h2 className="text-2xl font-bold mb-6 text-gray-800">Sign Up</h2>
-
-                {/* show error msg or success msg*/}
-                {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
-                {success && <p className="text-green-500 text-sm mb-4">{success}</p>}
 
                 <div className="mb-4">
                     <label
@@ -97,16 +123,16 @@ const Signup = () => {
                 </div>
                 <div className="mb-4">
                     <label
-                        htmlFor="username"
+                        htmlFor="userName"
                         className="block text-gray-600 font-medium mb-2"
                     >
                         User Name
                     </label>
                     <input
                         type="text"
-                        id="username"
-                        name="username"
-                        value={form.username}
+                        id="userName"
+                        name="userName"
+                        value={form.userName}
                         onChange={handleChange}
                         className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                         required
@@ -142,6 +168,7 @@ const Signup = () => {
                     </Link>
                 </p>
             </form>
+            <ToastContainer />
         </div>
     );
 };

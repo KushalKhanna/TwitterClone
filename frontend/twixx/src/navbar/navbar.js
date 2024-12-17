@@ -1,15 +1,25 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css'; // Import styles
+import 'react-toastify/dist/ReactToastify.css';
 
 const Navbar = () => {
     const navigate = useNavigate();
 
     const [isModalOpen, setIsModalOpen] = useState(false);
 
-    const handleConnectionClick = () => {
+    const userData = JSON.parse(sessionStorage.getItem('userData'));
+
+    const handleLogoClick = () => {
+        navigate('/home')
+    }
+
+    const handleConnectionClick = async () => {
         navigate('/connections')
+    }
+
+    const handleNotificationClick = async () => {
+        navigate(`/notification/${userData.userName}`)
     }
 
     const handleLogoutClick = () => {
@@ -27,6 +37,7 @@ const Navbar = () => {
             closeOnClick: true,
             pauseOnHover: false,
             onClose: () => {
+                sessionStorage.clear();
                 navigate('/login');
             }
         });
@@ -39,8 +50,8 @@ const Navbar = () => {
     return (
         <nav className="bg-blue-600 p-4">
             <div className="container mx-auto flex justify-between items-center">
-                <div className="text-white font-bold text-xl">Logo</div>
-
+                <button onClick={handleLogoClick} className="text-white font-bold text-xl">Logo</button>
+                {/* <div>Hi {userData?.userName}</div> */}
                 <div className="flex-grow max-w-md mx-4">
                     <input
                         type="text"
@@ -54,10 +65,11 @@ const Navbar = () => {
                         onClick={handleConnectionClick}
                     >
                         <i className="fas fa-user-friends"></i>
-                        {/* <FontAwesomeIcon icon="fa-solid fa-user-group" /> */}
                     </button>
-                    <button className="text-white bg-blue-500 p-2 rounded-full hover:bg-blue-700">
-                        <i className="fas fa-user-circle"></i>
+                    <button className="text-white bg-blue-500 p-2 rounded-full hover:bg-blue-700"
+                        onClick={handleNotificationClick}    
+                    >
+                        <i className="fas fa-bell"></i>
                     </button>
 
                     <button

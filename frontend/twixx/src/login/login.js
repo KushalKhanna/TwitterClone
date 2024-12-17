@@ -1,10 +1,14 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
+
+import apiUrls from '../constants/constants';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Login = () => {
     const navigate = useNavigate();
-    const [form, setForm] = useState({ userName: '', passWord: '' });
-    const [error, setError] = useState('');
+    const [form, setForm] = useState({ userName: '', password: '' });
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -13,30 +17,57 @@ const Login = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setError('');
 
         try {
-            const response = await fetch('http://localhost:3001/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(form),
-            });
-
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.message || 'Login failed');
+            const response = await axios.post(`${apiUrls.userBaseUrl}/login`, null,
+                {
+                    params: {
+                        userName: form.userName,
+                        password: form.password,
+                    },
+                }
+            );
+            if (response.status !== 200) {
+                toast.error("Something went wrong!'", {
+                    position: "top-right",
+                    autoClose: 1500,
+                    hideProgressBar: true,
+                    closeOnClick: true,
+                    pauseOnHover: false,
+                });
             }
 
-            const data = await response.json();
-            console.log('Login successful:', data);
-
-            navigate(`/home?username=${form.username}`);
+            if (response.data) {
+                toast.success('Successfully authenticated!', {
+                    position: "top-right",
+                    autoClose: 1500,
+                    hideProgressBar: true,
+                    closeOnClick: true,
+                    pauseOnHover: false,
+                    onClose: () => {
+                        sessionStorage.setItem(`userData`, JSON.stringify(form));
+                        navigate(`/home`);
+                    }
+                });
+            } else {
+                toast.error('Incorrect username or password!', {
+                    position: "top-right",
+                    autoClose: 1500,
+                    hideProgressBar: true,
+                    closeOnClick: true,
+                    pauseOnHover: false,
+                });
+            }
         } catch (err) {
-            console.error('Login error:', err.message);
-            setError(err.message);
+            toast.error(err, {
+                position: "top-right",
+                autoClose: 1500,
+                hideProgressBar: true,
+                closeOnClick: true,
+                pauseOnHover: false,
+            });
         }
+
     };
 
     return (
@@ -48,21 +79,18 @@ const Login = () => {
                 >
                     <h2 className="text-2xl font-bold mb-6 text-gray-800">Login</h2>
 
-                    {/* if error */}
-                    {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
-
                     <div className="mb-4">
                         <label
-                            htmlFor="username"
+                            htmlFor="userName"
                             className="block text-gray-600 font-medium mb-2"
                         >
                             User Name
                         </label>
                         <input
                             type="text"
-                            id="username"
-                            name="username"
-                            value={form.username}
+                            id="userName"
+                            name="userName"
+                            value={form.userName}
                             onChange={handleChange}
                             className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                             required
@@ -99,6 +127,7 @@ const Login = () => {
                     </p>
                 </form>
             </div>
+            <ToastContainer />
         </div>
     );
 };

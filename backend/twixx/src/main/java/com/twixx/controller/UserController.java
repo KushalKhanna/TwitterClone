@@ -14,9 +14,9 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @GetMapping("/{userId}")
-    public String getUser(@PathVariable String userId) {
-        return "HI";
+    @GetMapping("/{userName}")
+    public User getUser(@PathVariable String userName) {
+        return userService.getUserInfo(userName);
     }
 
     @GetMapping("/all-users")
@@ -28,5 +28,27 @@ public class UserController {
     public boolean login(@RequestParam(value = "userName") final String userName,
                          @RequestParam(value = "password") final String password) {
         return userService.login(userName, password);
+    }
+
+    @PostMapping("/signup")
+    public boolean login(@RequestParam(value = "firstName") final String firstName,
+                         @RequestParam(value = "lastName") final String lastName,
+                         @RequestParam(value = "userName") final String userName,
+                         @RequestParam(value = "password") final String password) {
+        return userService.signup(firstName, lastName, userName, password);
+    }
+
+    @PostMapping("/connect")
+    public void connectingUser(@RequestParam String currentUser,
+                               @RequestParam String targetUser) {
+        userService.coonectUser(currentUser, targetUser);
+    }
+
+    @PostMapping("/disconnect")
+    public void unfollowUser(
+            @RequestParam String currentUser,
+            @RequestParam String targetUser) {
+
+        userService.disconnectUser(currentUser, targetUser);
     }
 }

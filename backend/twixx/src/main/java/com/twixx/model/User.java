@@ -1,10 +1,16 @@
 package com.twixx.model;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.vladmihalcea.hibernate.type.json.JsonType;
+import org.hibernate.annotations.Type;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.ArrayList;
 
 @Entity
 @Getter
@@ -15,8 +21,10 @@ import lombok.Setter;
 public class User {
     private static User _instance;
 
+//    private static final ObjectMapper objectMapper = new ObjectMapper();
+
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="user_id")
     private Integer userId;
 
@@ -32,6 +40,15 @@ public class User {
     @Column(name="password")
     private String password;
 
+    @Type(JsonType.class)
     @Column(name="friends")
-    private String friendList;
+    private JsonNode friendList;
+
+    public User(String firstName, String lastName, String userName, String password) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.userName = userName;
+        this.password = password;
+        this.friendList = new ObjectMapper().createArrayNode();;
+    }
 }
